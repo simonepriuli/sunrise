@@ -1,0 +1,26 @@
+{
+  "name": "sunrise",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Vite + React + shadcn frontend with Express, Drizzle, and Neon Postgres",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,magenta \"npm run dev -w web\" \"npm run dev -w api\"",
+    "dev:web": "npm run dev -w web",
+    "dev:api": "npm run dev -w api",
+    "build": "npm run build -w web",
+    "lint": "npm run lint -w web --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:generate": "npm run db:generate -w api",
+    "db:push": "npm run db:push -w api",
+    "db:studio": "npm run db:studio -w api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
