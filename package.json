@@ -2,25 +2,24 @@
   "name": "sunrise",
   "private": true,
   "version": "0.1.0",
-  "description": "Vite + React + shadcn frontend with Express, Drizzle, and Neon Postgres",
-  "workspaces": [
-    "apps/*"
-  ],
+  "description": "Training log for Monte Adamello, July 2027",
+  "packageManager": "pnpm@11.0.8",
   "scripts": {
-    "dev": "concurrently -n web,api -c cyan,magenta \"npm run dev -w web\" \"npm run dev -w api\"",
-    "dev:web": "npm run dev -w web",
-    "dev:api": "npm run dev -w api",
-    "build": "npm run build -w web",
-    "lint": "npm run lint -w web --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present",
-    "db:generate": "npm run db:generate -w api",
-    "db:push": "npm run db:push -w api",
-    "db:studio": "npm run db:studio -w api"
+    "dev": "concurrently -n web,api -c cyan,magenta \"pnpm --filter web dev\" \"pnpm --filter api dev\"",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web --if-present lint",
+    "typecheck": "pnpm --recursive --if-present typecheck",
+    "db:generate": "pnpm --filter api db:generate",
+    "db:push": "pnpm --filter api db:push",
+    "db:studio": "pnpm --filter api db:studio"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=11"
   }
 }

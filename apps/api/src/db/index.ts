@@ -43,12 +43,25 @@ export function getDb() {
 export async function ensureSchema() {
   if (!schemaReady) {
     schemaReady = getSql()`
-      CREATE TABLE IF NOT EXISTS notes (
+      CREATE TABLE IF NOT EXISTS trainings (
         id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-        body text NOT NULL,
-        created_at timestamptz NOT NULL DEFAULT now()
+        date date NOT NULL,
+        title text NOT NULL,
+        type text NOT NULL,
+        status text NOT NULL DEFAULT 'planned',
+        duration_minutes integer,
+        distance_km real,
+        elevation_m integer,
+        notes text,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now()
       )
-    `.then(() => undefined)
+    `
+      .then(
+        () =>
+          getSql()`CREATE INDEX IF NOT EXISTS trainings_date_idx ON trainings (date)`
+      )
+      .then(() => undefined)
   }
 
   await schemaReady

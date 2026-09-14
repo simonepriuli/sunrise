@@ -12,3 +12,9 @@ createRoot(document.getElementById("root")!).render(
     </ThemeProvider>
   </StrictMode>
 )
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    void navigator.serviceWorker.register("/sw.js")
+  })
+}

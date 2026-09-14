@@ -1,6 +1,6 @@
 # Sunrise
 
-Vite + React + Tailwind + shadcn/ui on the frontend. Express + TypeScript, Drizzle ORM, and Neon Postgres on the backend. One Vercel project serves both.
+Personal training log for summiting **Monte Adamello** (3,539 m) in **July 2027**. Home shows the countdown and progress. Calendar holds every session. The web app installs as a PWA on your phone.
 
 ## Stack
 
@@ -22,7 +22,9 @@ npm run dev
 - Web: [http://localhost:5173](http://localhost:5173)
 - API: [http://localhost:3001](http://localhost:3001)
 
-The Vite dev server proxies `/api` to Express. Press `d` in the UI to toggle dark mode.
+Press `d` to toggle dark mode.
+
+To install on a phone, open the deployed HTTPS URL (or localhost on the same device), then **Share → Add to Home Screen** on iOS, or **Install app** on Android.
 
 ## Scripts
 
