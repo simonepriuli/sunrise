@@ -10,17 +10,24 @@ import {
 } from "react"
 import {
   createTraining,
+  createTrainingType,
   deleteTraining,
+  deleteTrainingType,
   getHealth,
+  listTrainingTypes,
   listTrainings,
   updateTraining,
+  updateTrainingType,
   type HealthResponse,
   type Training,
   type TrainingInput,
+  type TrainingType,
+  type TrainingTypeInput,
 } from "@/lib/api"
 
 type TrainingsContextValue = {
   trainings: Training[]
+  types: TrainingType[]
   health: HealthResponse | null
   loading: boolean
   error: string | null
@@ -28,6 +35,8 @@ type TrainingsContextValue = {
   save: (input: TrainingInput, id?: string) => Promise<void>
   complete: (id: string) => Promise<void>
   remove: (id: string) => Promise<void>
+  saveType: (input: TrainingTypeInput, id?: string) => Promise<void>
+  removeType: (id: string) => Promise<void>
 }
 
 const TrainingsContext = createContext<TrainingsContextValue | undefined>(
@@ -36,17 +45,20 @@ const TrainingsContext = createContext<TrainingsContextValue | undefined>(
 
 export function TrainingsProvider({ children }: { children: ReactNode }) {
   const [trainings, setTrainings] = useState<Training[]>([])
+  const [types, setTypes] = useState<TrainingType[]>([])
   const [health, setHealth] = useState<HealthResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
-    const [nextHealth, nextTrainings] = await Promise.all([
+    const [nextHealth, nextTrainings, nextTypes] = await Promise.all([
       getHealth(),
       listTrainings(),
+      listTrainingTypes(),
     ])
     setHealth(nextHealth)
     setTrainings(nextTrainings)
+    setTypes(nextTypes)
     setError(null)
   }, [])
 
@@ -99,9 +111,30 @@ export function TrainingsProvider({ children }: { children: ReactNode }) {
     [refresh]
   )
 
+  const saveType = useCallback(
+    async (input: TrainingTypeInput, id?: string) => {
+      if (id) {
+        await updateTrainingType(id, input)
+      } else {
+        await createTrainingType(input)
+      }
+      await refresh()
+    },
+    [refresh]
+  )
+
+  const removeType = useCallback(
+    async (id: string) => {
+      await deleteTrainingType(id)
+      await refresh()
+    },
+    [refresh]
+  )
+
   const value = useMemo(
     () => ({
       trainings,
+      types,
       health,
       loading,
       error,
@@ -109,8 +142,22 @@ export function TrainingsProvider({ children }: { children: ReactNode }) {
       save,
       complete,
       remove,
+      saveType,
+      removeType,
     }),
-    [trainings, health, loading, error, refresh, save, complete, remove]
+    [
+      trainings,
+      types,
+      health,
+      loading,
+      error,
+      refresh,
+      save,
+      complete,
+      remove,
+      saveType,
+      removeType,
+    ]
   )
 
   return (

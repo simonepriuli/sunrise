@@ -145,7 +145,7 @@ export function HomePage() {
               <Card>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    Nothing logged for today. Add a hike, ski tour, or gym session.
+                    Nothing logged for today. Add a session when you are ready.
                   </p>
                 </CardContent>
               </Card>

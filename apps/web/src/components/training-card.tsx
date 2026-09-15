@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Training } from "@/lib/api"
-import { STATUS_META, TRAINING_META, typeTintClass } from "@/lib/training"
+import { STATUS_META, typeTintClass } from "@/lib/training"
 import { formatDay, formatNumber } from "@/lib/dates"
 
 type TrainingCardProps = {
@@ -21,7 +21,7 @@ export function TrainingCard({ training, onOpen, onComplete }: TrainingCardProps
 
   return (
     <Card>
-      <CardContent className="flex items-start gap-3">
+      <CardContent className="flex items-center gap-3">
         <button
           type="button"
           className="flex min-w-0 flex-1 flex-col items-start gap-1.5 text-left"
@@ -29,9 +29,9 @@ export function TrainingCard({ training, onOpen, onComplete }: TrainingCardProps
         >
           <div className="flex w-full items-center gap-2">
             <span
-              className={`inline-flex h-5 items-center rounded-full px-2 text-[11px] font-medium ${typeTintClass(training.type)}`}
+              className={`inline-flex h-5 items-center rounded-full px-2 text-[11px] font-medium ${typeTintClass(training.category)}`}
             >
-              {TRAINING_META[training.type].shortLabel}
+              {training.typeName}
             </span>
             <span className="truncate text-sm font-medium">{training.title}</span>
           </div>
@@ -48,8 +48,9 @@ export function TrainingCard({ training, onOpen, onComplete }: TrainingCardProps
         {training.status === "planned" && onComplete ? (
           <Button
             type="button"
-            size="icon"
+            size="icon-xl"
             variant="outline"
+            className="touch-manipulation"
             aria-label={`Mark ${training.title} complete`}
             onClick={() => onComplete(training.id)}
           >

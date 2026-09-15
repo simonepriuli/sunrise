@@ -1,13 +1,7 @@
-import type { TrainingStatus, TrainingType } from "@/lib/api"
+import type { TrainingCategory, TrainingStatus, TrainingType } from "@/lib/api"
+import { TRAINING_CATEGORIES } from "@/lib/api"
 
-export const TRAINING_TYPES = [
-  "hike",
-  "ski",
-  "strength",
-  "cardio",
-  "mobility",
-  "rest",
-] as const satisfies readonly TrainingType[]
+export { TRAINING_CATEGORIES, type TrainingCategory }
 
 export const TRAINING_STATUSES = [
   "planned",
@@ -15,24 +9,13 @@ export const TRAINING_STATUSES = [
   "skipped",
 ] as const satisfies readonly TrainingStatus[]
 
-export const TRAINING_META: Record<
-  TrainingType,
-  { label: string; shortLabel: string; defaultTitle: string }
-> = {
-  hike: { label: "Hike", shortLabel: "Hike", defaultTitle: "Elevation hike" },
-  ski: { label: "Ski tour", shortLabel: "Ski", defaultTitle: "Ski tour" },
-  strength: {
-    label: "Strength",
-    shortLabel: "Gym",
-    defaultTitle: "Strength session",
-  },
-  cardio: { label: "Cardio", shortLabel: "Cardio", defaultTitle: "Cardio" },
-  mobility: {
-    label: "Mobility",
-    shortLabel: "Mobility",
-    defaultTitle: "Mobility",
-  },
-  rest: { label: "Rest", shortLabel: "Rest", defaultTitle: "Rest day" },
+export const CATEGORY_META: Record<TrainingCategory, { label: string }> = {
+  hike: { label: "Hike" },
+  ski: { label: "Ski" },
+  strength: { label: "Strength" },
+  cardio: { label: "Cardio" },
+  mobility: { label: "Mobility" },
+  rest: { label: "Rest" },
 }
 
 export const STATUS_META: Record<TrainingStatus, { label: string }> = {
@@ -41,8 +24,15 @@ export const STATUS_META: Record<TrainingStatus, { label: string }> = {
   skipped: { label: "Skipped" },
 }
 
-export function typeDotClass(type: TrainingType) {
-  switch (type) {
+export function typesForCategory(
+  types: TrainingType[],
+  category: TrainingCategory
+) {
+  return types.filter((type) => type.category === category)
+}
+
+export function typeDotClass(category: TrainingCategory) {
+  switch (category) {
     case "hike":
       return "bg-primary"
     case "ski":
@@ -58,8 +48,8 @@ export function typeDotClass(type: TrainingType) {
   }
 }
 
-export function typeTintClass(type: TrainingType) {
-  switch (type) {
+export function typeTintClass(category: TrainingCategory) {
+  switch (category) {
     case "hike":
       return "bg-primary/15 text-primary"
     case "ski":

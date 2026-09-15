@@ -149,7 +149,7 @@ export function CalendarPage() {
                       {dayTrainings.slice(0, 3).map((training) => (
                         <span
                           key={training.id}
-                          className={cn("size-1.5 rounded-full", typeDotClass(training.type))}
+                          className={cn("size-1.5 rounded-full", typeDotClass(training.category))}
                         />
                       ))}
                     </span>

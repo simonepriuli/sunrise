@@ -8,6 +8,18 @@ import {
   uuid,
 } from "drizzle-orm/pg-core"
 
+export const trainingTypes = pgTable("training_types", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+})
+
 export const trainings = pgTable("trainings", {
   id: uuid("id").defaultRandom().primaryKey(),
   date: date("date").notNull(),

@@ -4,21 +4,40 @@ export type HealthResponse = {
   database: "connected" | "disconnected" | "unconfigured"
 }
 
-export type TrainingType =
-  | "hike"
-  | "ski"
-  | "strength"
-  | "cardio"
-  | "mobility"
-  | "rest"
+export const TRAINING_CATEGORIES = [
+  "hike",
+  "ski",
+  "strength",
+  "cardio",
+  "mobility",
+  "rest",
+] as const
+
+export type TrainingCategory = (typeof TRAINING_CATEGORIES)[number]
 
 export type TrainingStatus = "planned" | "completed" | "skipped"
+
+export type TrainingType = {
+  id: string
+  name: string
+  category: TrainingCategory
+  usageCount: number
+  createdAt: string
+  updatedAt: string
+}
+
+export type TrainingTypeInput = {
+  name: string
+  category: TrainingCategory
+}
 
 export type Training = {
   id: string
   date: string
   title: string
-  type: TrainingType
+  typeId: string
+  typeName: string
+  category: TrainingCategory
   status: TrainingStatus
   durationMinutes: number | null
   distanceKm: number | null
@@ -31,7 +50,7 @@ export type Training = {
 export type TrainingInput = {
   date: string
   title: string
-  type: TrainingType
+  typeId: string
   status: TrainingStatus
   durationMinutes?: number | null
   distanceKm?: number | null
@@ -49,6 +68,56 @@ async function readError(response: Response, fallback: string) {
 export async function getHealth() {
   const response = await fetch("/api/health")
   return (await response.json()) as HealthResponse
+}
+
+export async function listTrainingTypes() {
+  const response = await fetch("/api/training-types")
+  if (!response.ok) {
+    throw new Error(await readError(response, "Failed to load training types"))
+  }
+
+  const data = (await response.json()) as { types: TrainingType[] }
+  return data.types
+}
+
+export async function createTrainingType(input: TrainingTypeInput) {
+  const response = await fetch("/api/training-types", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  })
+
+  if (!response.ok) {
+    throw new Error(await readError(response, "Failed to save training type"))
+  }
+
+  const data = (await response.json()) as { type: TrainingType }
+  return data.type
+}
+
+export async function updateTrainingType(
+  id: string,
+  input: Partial<TrainingTypeInput>
+) {
+  const response = await fetch(`/api/training-types/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  })
+
+  if (!response.ok) {
+    throw new Error(await readError(response, "Failed to update training type"))
+  }
+
+  const data = (await response.json()) as { type: TrainingType }
+  return data.type
+}
+
+export async function deleteTrainingType(id: string) {
+  const response = await fetch(`/api/training-types/${id}`, { method: "DELETE" })
+  if (!response.ok) {
+    throw new Error(await readError(response, "Failed to delete training type"))
+  }
 }
 
 export async function listTrainings(range?: { from?: string; to?: string }) {
