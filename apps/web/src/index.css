@@ -128,9 +128,16 @@
     -webkit-tap-highlight-color: transparent;
     }
   html,
-  body,
+  body {
+    height: 100%;
+    overflow: hidden;
+    }
+  /* iOS standalone resolves 100dvh short by the top inset, leaving dead space
+     at the bottom of the screen. Pinning to the layout viewport, which
+     viewport-fit=cover extends edge to edge, is exact on every device. */
   #root {
-    height: 100dvh;
+    position: fixed;
+    inset: 0;
     overflow: hidden;
     }
   body {
